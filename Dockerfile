@@ -8,7 +8,7 @@ WORKDIR /code
 COPY ./requirements.txt /code/requirements.txt
 
 ## Install the requirements.txt
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 # Set up a new user named "user" 
 RUN useradd user
@@ -27,5 +27,5 @@ WORKDIR $HOME/app
 COPY --chown=user . $HOME/app
 
 ## Start the FASTAPI App on port 7860
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "90000"]
 
