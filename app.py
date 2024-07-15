@@ -1,23 +1,25 @@
-# @title Default title text
 from fastapi import FastAPI
 from transformers import pipeline
 
-#create nea fastAPI app instance
+## create a new FASTAPI app instance
 app=FastAPI()
 
-# Use a pipeline as a high-level helper
+# Initialize the text generation pipeline
+pipe = pipeline("text2text-generation", model="google/flan-t5-small")
 
-
-
-pipeline=pipeline("text2text-generation", model="google/flan-t5-small")
 
 @app.get("/")
 def home():
-  return  {"messag":" hellow word"}
-  @app.get("/generate")
-  def generate(text:str):
-    # Initialize the text generation pipeline
+    return {"message":"Hello World"}
 
+# Define a function to handle the GET request at `/generate`
+
+
+@app.get("/generate")
+def generate(text:str):
+    ## use the pipeline to generate text from given input text
     output=pipe(text)
 
-    return  {"output_text":output}[0]['generated_text']
+    ## return the generate text in Json reposne
+    return {"output":output[0]['generated_text']}
+

@@ -1,28 +1,31 @@
-# using the offical python 3.12.1 image
-from python:3.12.1
-# set  the working directory to / code 
-WORKDIR / code
-#copy the current directoy contentents in container at / code
-copy ./ requirements.txt/code/ requirements.txt
-# install the  requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-# set up a new user name "user"
+## Use the official Python 3.9 image
+FROM python:3.12.1
+
+## set the working directory to /code
+WORKDIR /code
+
+## Copy the current directory contents in the container at /code
+COPY ./requirements.txt /code/requirements.txt
+
+## Install the requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+# Set up a new user named "user" 
 RUN useradd user
-
+# Switch to the "user" user
 USER user
-# set home  to home user's  directory 
-ENV HOME=/home/user \ 
-    PATH=/home/user/.local/bin:$PATH
-# Set the working directory in the container to the home directory of the new user
+
+# Set home to the user's home directory
+
+ENV HOME=/home/user \
+	PATH=/home/user/.local/bin:$PATH
+
+# Set the working directory to the user's home directory
 WORKDIR $HOME/app
 
-# Set the working directory in the container to the home directory of the new user
-WORKDIR $HOME/app
-# Change the ownership of the copied files to the new user
-COPY --chown=user .$HOME/app
+# Copy the current directory contents into the container at $HOME/app setting the owner to the user
+COPY --chown=user . $HOME/app
 
-# Start FastAPI with uvicorn
-CMD ["uvicorn", "app:app", "--host" , "0.0.0.0", "--port", "7860"]
-
-
+## Start the FASTAPI App on port 7860
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "7860"]
 
